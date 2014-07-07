@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 import unittest
 
 class NewVisitorTest(unittest.TestCase): #1
@@ -17,18 +18,30 @@ class NewVisitorTest(unittest.TestCase): #1
 
         #he notice the page title and header mention a to-do list
         self.assertIn('To-Do',self.browser.title) #5
-        self.fail('Finish the test')#6
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do',header_text)
 
         #he is invited to enter a to-do item straigt away
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        self.assertEqual(inputbox.get_attribute('placeholder',
+            'Enter a to-do item'))
+
 
         #he types "buy peacock feathers" into a text box (for fly fishing
         #lours)
+        inputbox.send_keys('Buy peacock feathers')
 
         #when he hits enter the page updates and now the pages lists
         # "1: buy peacock feathers" as a todo list item
+        inputbox.send_keys(Keys.ENTER)
 
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(any(row.text == '1: Buy peacock features' for row in rows))
+        
         #there is still a text box inviting him to add another item.
         #he enters "use feathers to make fly"
+        self.fail('Finish the test!')
 
         #the page updates again, now both her list items are there
 
