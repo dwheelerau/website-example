@@ -23,8 +23,8 @@ class NewVisitorTest(unittest.TestCase): #1
 
         #he is invited to enter a to-do item straigt away
         inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertEqual(inputbox.get_attribute('placeholder',
-            'Enter a to-do item'))
+        self.assertEqual(inputbox.get_attribute('placeholder'),
+            'Enter a to-do item')
 
 
         #he types "buy peacock feathers" into a text box (for fly fishing
@@ -37,7 +37,10 @@ class NewVisitorTest(unittest.TestCase): #1
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: Buy peacock features' for row in rows))
+        self.assertTrue(any(row.text == '1: Buy peacock features' 
+            for row in rows),
+            "New to-do item did not appear in the table"
+            )
         
         #there is still a text box inviting him to add another item.
         #he enters "use feathers to make fly"
