@@ -11,6 +11,11 @@ class NewVisitorTest(unittest.TestCase): #1
     def tearDown(self): #3
         self.browser.quit()
 
+    def check_for_row_in_list_table(self,row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text,[row.text for row in rows])
+
     def test_can_start_a_list_and_retrive_it_later(self): #4
         #fred has heard about a cool list site on the web
         #he decides to go out and check it out
@@ -34,12 +39,8 @@ class NewVisitorTest(unittest.TestCase): #1
         #when he hits enter the page updates and now the pages lists
         # "1: buy peacock feathers" as a todo list item
         inputbox.send_keys(Keys.ENTER)
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy peacock feathers',
-                [row.text for row in rows])
-        
         #there is still a text box inviting him to add another item.
         #he enters "use feathers to make fly"
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -47,18 +48,10 @@ class NewVisitorTest(unittest.TestCase): #1
         inputbox.send_keys(Keys.ENTER)
 
         #the page updates again, now both her list items are there
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: Buy peacock feathers',
-                [row.text for row in rows])
-        self.assertIn('2: Use peacock feathers to make a fly',
-                [row.text for row in rows])
-        
+        self.check_for_row_in_list_table('1: Buy peacock feathers')
+        self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
       
-
         self.fail('Finish the test!')
-
-
 
         #fred wonders what will become of his list, he notes that the 
         #url has been created that is unique to this page, and that
