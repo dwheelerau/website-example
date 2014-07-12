@@ -37,16 +37,28 @@ class NewVisitorTest(unittest.TestCase): #1
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: Buy peacock features' 
-            for row in rows),
-            "New to-do item did not appear in the table"
-            )
+        self.assertIn('1: Buy peacock feathers',
+                [row.text for row in rows])
         
         #there is still a text box inviting him to add another item.
         #he enters "use feathers to make fly"
-        self.fail('Finish the test!')
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Use peacock feathers to make a fly')
+        inputbox.send_keys(Keys.ENTER)
 
         #the page updates again, now both her list items are there
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn('1: Buy peacock feathers',
+                [row.text for row in rows])
+        self.assertIn('2: Use peacock feathers to make a fly',
+                [row.text for row in rows])
+        
+      
+
+        self.fail('Finish the test!')
+
+
 
         #fred wonders what will become of his list, he notes that the 
         #url has been created that is unique to this page, and that
