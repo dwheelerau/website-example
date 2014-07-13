@@ -10,4 +10,7 @@ def home_page(request):
         Item.objects.create(text=request.POST['item_text'])
         return redirect('/')
     
-    return render(request,'home.html')
+    items = Item.objects.all()
+    #sends items to the template home.html using the key 'items'
+    #the template uses this as {{% for item in items %}}
+    return render(request,'home.html',{'items':items})

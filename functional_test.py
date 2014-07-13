@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import unittest
+import time
 
 class NewVisitorTest(unittest.TestCase): #1
 
@@ -50,7 +51,7 @@ class NewVisitorTest(unittest.TestCase): #1
         #the page updates again, now both her list items are there
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
-      
+        time.sleep(5)
         self.fail('Finish the test!')
 
         #fred wonders what will become of his list, he notes that the 
