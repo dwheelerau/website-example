@@ -40,6 +40,8 @@ class NewVisitorTest(LiveServerTestCase): #1
         #when he hits enter the page updates and now the pages lists
         # "1: buy peacock feathers" as a todo list item
         inputbox.send_keys(Keys.ENTER)
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url,'/lists/.+')
         self.check_for_row_in_list_table('1: Buy peacock feathers')
 
         #there is still a text box inviting him to add another item.
@@ -51,9 +53,34 @@ class NewVisitorTest(LiveServerTestCase): #1
         #the page updates again, now both her list items are there
         self.check_for_row_in_list_table('1: Buy peacock feathers')
         self.check_for_row_in_list_table('2: Use peacock feathers to make a fly')
-        time.sleep(5)
-        self.fail('Finish the test!')
+        #time.sleep(5)
+        #self.fail('Finish the test!')
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+        
+        #ted visits the website, there is no sign of freds list
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers',page_text)
+        self.assertNotIn('make a fly',page_text)
 
+        #ted starts a new list
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy milk')
+        inputbox.send_keys(keys.ENTER)
+
+        #ted gets his own unique url
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url,'/lists/.+')
+        self.assertNotEqual(francis_list_url,edith_list_url)
+
+        #again there is no trace of ediths list
+        page_text = self.browser.find_elements_by_tag_name('body').text
+        self.assertNotIn('Buy peacock feathers',page_text)
+        self.assertIn('Buy milk',page_text)
+
+        #satisfied they go back to sleep
+        
         #fred wonders what will become of his list, he notes that the 
         #url has been created that is unique to this page, and that
         #there is some explanation that says something to that effect
