@@ -67,7 +67,7 @@ class NewVisitorTest(LiveServerTestCase): #1
         #ted starts a new list
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Buy milk')
-        inputbox.send_keys(keys.ENTER)
+        inputbox.send_keys(Keys.ENTER)
 
         #ted gets his own unique url
         francis_list_url = self.browser.current_url
